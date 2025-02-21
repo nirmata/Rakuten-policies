@@ -1,0 +1,2 @@
+# Rakuten-policies
+Rakuten-policies

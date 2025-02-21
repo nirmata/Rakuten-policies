@@ -10,7 +10,7 @@ metadata:
     policies.kyverno.io/minversion: 1.9.0
     kyverno.io/kubernetes-version: "1.24"
     policies.kyverno.io/description: >-
-      This policy ensures that only Pods and Services with the specific Robin labels 
+      This policy ensures that only Pods and Services with the exact Robin labels 
       can use the reserved ports 29442 - 29470. Any other Pods or Services trying 
       to use these ports will be denied.
 spec:
@@ -24,13 +24,13 @@ spec:
               kinds:
                 - Service
       validate:
-        message: "Only Services with specific Robin labels can use reserved Robin ports (29442 - 29470)."
+        message: "Only Services with exact Robin labels can use reserved Robin ports (29442 - 29470)."
         deny:
           conditions:
-            any:
+            all:
               - key: "{{ request.object.spec.ports[].port || `[]` }}"
                 operator: AnyIn
-                value:
+                value: 
                   - 29442
                   - 29443
                   - 29444
@@ -60,12 +60,6 @@ spec:
                   - 29468
                   - 29469
                   - 29470
-              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
-                operator: NotEquals
-                value: "robin"
-              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/managed-by\" }}"
-                operator: NotEquals
-                value: "robin.io"
               - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
                 operator: NotEquals
                 value: "robin"
@@ -77,13 +71,13 @@ spec:
               kinds:
                 - Pod
       validate:
-        message: "Only Pods with specific Robin labels can use reserved Robin ports (29442 - 29470)."
+        message: "Only Pods with exact Robin labels can use reserved Robin ports (29442 - 29470)."
         deny:
           conditions:
-            any:
+            all:
               - key: "{{ request.object.spec.containers[].ports[].containerPort || `[]` }}"
                 operator: AnyIn
-                value:
+                value: 
                   - 29442
                   - 29443
                   - 29444
@@ -113,12 +107,6 @@ spec:
                   - 29468
                   - 29469
                   - 29470
-              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
-                operator: NotEquals
-                value: "robin"
-              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/managed-by\" }}"
-                operator: NotEquals
-                value: "robin.io"
               - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
                 operator: NotEquals
                 value: "robin"

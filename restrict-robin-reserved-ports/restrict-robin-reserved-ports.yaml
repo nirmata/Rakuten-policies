@@ -27,9 +27,9 @@ spec:
         message: "Only Services with exact Robin labels can use reserved Robin ports (29442 - 29470)."
         deny:
           conditions:
-            all:
+            any:
               - key: "{{ request.object.spec.ports[].port || `[]` }}"
-                operator: AnyIn
+                operator: AnyNotIn
                 value: 
                   - 29442
                   - 29443
@@ -60,6 +60,12 @@ spec:
                   - 29468
                   - 29469
                   - 29470
+              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
+                operator: NotEquals
+                value: "robin"
+              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/managed-by\" }}"
+                operator: NotEquals
+                value: "robin.io"
               - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
                 operator: NotEquals
                 value: "robin"
@@ -74,9 +80,9 @@ spec:
         message: "Only Pods with exact Robin labels can use reserved Robin ports (29442 - 29470)."
         deny:
           conditions:
-            all:
+            any:
               - key: "{{ request.object.spec.containers[].ports[].containerPort || `[]` }}"
-                operator: AnyIn
+                operator: AnyNotIn
                 value: 
                   - 29442
                   - 29443
@@ -107,6 +113,12 @@ spec:
                   - 29468
                   - 29469
                   - 29470
+              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
+                operator: NotEquals
+                value: "robin"
+              - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/managed-by\" }}"
+                operator: NotEquals
+                value: "robin.io"
               - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
                 operator: NotEquals
                 value: "robin"

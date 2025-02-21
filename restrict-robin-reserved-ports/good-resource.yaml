@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: valid-robin-service
   labels:
+    app.kubernetes.io/instance: robin
+    app.kubernetes.io/managed-by: robin.io
     app.kubernetes.io/name: robin
 spec:
   selector:
@@ -16,6 +18,8 @@ kind: Pod
 metadata:
   name: valid-robin-pod
   labels:
+    app.kubernetes.io/instance: robin
+    app.kubernetes.io/managed-by: robin.io
     app.kubernetes.io/name: robin
 spec:
   containers:
@@ -23,4 +27,3 @@ spec:
       image: nginx
       ports:
         - containerPort: 29450
-
